@@ -1,0 +1,17 @@
+
+
+.product {
+    width: 150px;
+    float: left;
+    margin-left: 20px;
+}
+
+img {
+    display: block;
+}
+
+button {
+    margin-top: 15px;
+    display: block;
+    margin-bottom: 15px;
+}
