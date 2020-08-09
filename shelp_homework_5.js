@@ -61,52 +61,76 @@ function hideText(parentCard) {
 
 //Задание 5
 
-let last_div_prod = document.querySelector('p');
-last_div_prod.insertAdjacentHTML('afterend', getChess());
-
-function getChess() {
-    let text = '<div class="container">';
-    let i = 1;
-    while (i != 9) {
-        if (i % 2 == 0) {
-            text += getFistLine();
-            i++;
-        } else {
-            text += getSecnLine();
-            i++;
+// создаем шахматную доску и раставляем шахмоты
+let board = document.createElement('table');
+document.body.appendChild(board);
+let list_letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+let chess = ['Л', 'К', 'С', 'Ф', 'Кр', 'С', 'К', 'Л'];
+let name = '';
+let chess_in = { name: '', color: '' };
+let step_counter = 1;
+for (let row = 0; row < 8; row++) {
+    let tr = document.createElement('tr');
+    board.appendChild(tr);
+    for (let col = 0; col < 8; col++) {
+        let td = document.createElement('td');
+        tr.appendChild(td);
+        td.classList = list_letter[row] + (col + 1);
+        if (row % 2 == 0 && col % 2 != 0) {
+            td.style.backgroundColor = 'black';
+        } else if (row % 2 != 0 && col % 2 == 0) {
+            td.style.backgroundColor = 'black';
         }
+        if (row == 0) {
+            td.innerHTML = chess[col];
+            td.style.color = 'black';
+            td.style.textShadow = 'white 1px 1px 0, white -1px -1px 0, white -1px 1px 0, white 1px -1px 0';
+        } else if (row == 7) {
+            td.innerHTML = chess[col];
+            td.style.color = 'white';
+            td.style.textShadow = 'black 1px 1px 0, black -1px -1px 0, black -1px 1px 0, black 1px -1px 0';
+        }
+        if (row == 1) {
+            td.innerHTML = 'п';
+            td.style.color = 'black';
+            td.style.textShadow = 'white 1px 1px 0, white -1px -1px 0, white -1px 1px 0, white 1px -1px 0';
+        } else if (row == 6) {
+            td.innerHTML = 'п';
+            td.style.color = 'white';
+            td.style.textShadow = 'black 1px 1px 0, black -1px -1px 0, black -1px 1px 0, black 1px -1px 0';
+        }
+        td.addEventListener('click', {
+            handleEvent(event) {
+                if (step_counter % 2 != 0) {
+                    takeChees(event);
+                } else {
+                    putChees(event);
+                }
+                step_counter++
+            }
+        });
     }
-    text += "</div>";
-    return text;
+}
+console.log('pause');
+
+// создаем возможность двигать фигуры
+function takeChees(event) {
+    if (event.target.innerText == '') {  //чтобы не сделать копию уже пустой ячейки
+        step_counter++
+        return
+    }
+    chess_in.name = event.target.innerText;
+    chess_in.color = event.target.style.color;
+    event.target.innerText = '';
+    event.target.style.color = '';
 }
 
-function getFistLine() {
-    let i = 1;
-    let text = "";
-    while (i != 9) {
-        if (i % 2 == 0) {
-            text += '<div class="chess white"></div>';
-            i++;
-        } else {
-            text += '<div class="chess black"></div>';
-            i++;
-        }
+function putChees(event) {
+    event.target.innerText = chess_in.name;
+    event.target.style.color = chess_in.color;
+    if (chess_in.color == 'black') {
+        event.target.style.textShadow = 'white 1px 1px 0, white -1px -1px 0, white -1px 1px 0, white 1px -1px 0';
+    } else {
+        event.target.style.textShadow = 'black 1px 1px 0, black -1px -1px 0, black -1px 1px 0, black 1px -1px 0';
     }
-    return text;
 }
-
-function getSecnLine() {
-    let i = 1;
-    let text = "";
-    while (i != 9) {
-        if (i % 2 == 0) {
-            text += '<div class="chess black"></div>';
-            i++;
-        } else {
-            text += '<div class="chess white"></div>';
-            i++;
-        }
-    }
-    return text;
-}
-console.log("123");
